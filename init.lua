@@ -157,6 +157,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>ht", builtin.help_tags)
 			-- vim.keymap.set('n', '<a-p>', ":Telescope find_files" )
 			vim.keymap.set("n", "<a-s-g>", builtin.git_status)
+			vim.keymap.set("n", "<a-s-f>", builtin.live_grep)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
 					local bufnr = args.buf
