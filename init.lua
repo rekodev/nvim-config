@@ -153,11 +153,11 @@ require("lazy").setup({
 			})
 			require("telescope").load_extension("fzf")
 			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<a-p>", builtin.find_files)
+			vim.keymap.set("n", "<leader>p", builtin.find_files)
 			vim.keymap.set("n", "<leader>ht", builtin.help_tags)
 			-- vim.keymap.set('n', '<a-p>', ":Telescope find_files" )
-			vim.keymap.set("n", "<a-s-g>", builtin.git_status)
-			vim.keymap.set("n", "<a-s-f>", builtin.live_grep)
+			vim.keymap.set("n", "<leader><s-g>", builtin.git_status)
+			vim.keymap.set("n", "<leader><s-f>", builtin.live_grep)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
 					local bufnr = args.buf
@@ -191,7 +191,7 @@ require("lazy").setup({
 					follow_current_file = { enabled = true, leave_dirs_open = false },
 				},
 			})
-			vim.keymap.set("n", "<a-b>", ":Neotree toggle<CR>")
+			vim.keymap.set("n", "<leader>b", ":Neotree toggle<CR>")
 		end,
 	},
 	{ "windwp/nvim-autopairs", opts = { disable_filetype = { "TelescopePrompt", "vim" }, check_ts = true } },
