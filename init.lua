@@ -189,6 +189,7 @@ require("lazy").setup({
 				filesystem = {
 					filtered_items = { hide_dotfiles = false, hide_gitignored = false, visible = true },
 					follow_current_file = { enabled = true, leave_dirs_open = false },
+					use_libuv_file_watcher = true,
 				},
 			})
 			vim.keymap.set("n", "<leader>b", ":Neotree toggle<CR>")
@@ -231,6 +232,11 @@ require("lazy").setup({
 		"nvim-lualine/lualine.nvim",
 		opts = {},
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+	},
+	{
+
+		"tronikelis/conflict-marker.nvim",
+		opts = {},
 	},
 })
 
