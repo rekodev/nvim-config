@@ -58,13 +58,6 @@ vim.diagnostic.config({ update_in_insert = true })
 require("lazy").setup({
 	-- add your plugins here
 	{
-		"olimorris/onedarkpro.nvim",
-		priority = 1000, -- Ensure it loads first
-		opts = {
-			options = { cursorline = true },
-		},
-	},
-	{
 		"williamboman/mason.nvim",
 		config = function()
 			require("mason").setup()
@@ -83,6 +76,7 @@ require("lazy").setup({
 			setupServer("ts_ls")
 			setupServer("tailwindcss")
 			setupServer("eslint")
+			setupServer("jsonls")
 
 			local cmp = require("cmp")
 
@@ -238,6 +232,15 @@ require("lazy").setup({
 		"tronikelis/conflict-marker.nvim",
 		opts = {},
 	},
+	{
+		"folke/ts-comments.nvim",
+		opts = {},
+		event = "VeryLazy",
+		enabled = vim.fn.has("nvim-0.10.0") == 1,
+	},
+	{
+		"nobbmaestro/nvim-andromeda",
+		dependencies = { "tjdevries/colorbuddy.nvim" },
+		opts = {},
+	},
 })
-
-vim.cmd("colorscheme onedark")
