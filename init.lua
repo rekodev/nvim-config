@@ -145,6 +145,9 @@ require("lazy").setup({
 					},
 				},
 				defaults = {
+					file_ignore_patterns = {
+						".git/",
+					},
 					mappings = {
 						i = {
 							["<esc>"] = actions.close,
@@ -186,10 +189,48 @@ require("lazy").setup({
 			-- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		},
 		config = function()
+			local events = require("neo-tree.events")
+			---@class FileMovedArgs
+			---@field source string
+			---@field destination string
+
+			---@param args FileMovedArgs
+			local function on_file_remove(args)
+				local ts_clients = vim.lsp.get_active_clients({ name = "ts_ls" })
+				for _, ts_client in ipairs(ts_clients) do
+					ts_client.request("workspace/executeCommand", {
+						command = "_typescript.applyRenameFile",
+						arguments = {
+							{
+								sourceUri = vim.uri_from_fname(args.source),
+								targetUri = vim.uri_from_fname(args.destination),
+							},
+						},
+					})
+				end
+			end
+
 			require("neo-tree").setup({
 				filesystem = {
 					filtered_items = { hide_dotfiles = false, hide_gitignored = false, visible = true },
 					follow_current_file = { enabled = true, leave_dirs_open = false },
+				},
+				event_handlers = {
+					{
+						event = events.NEO_TREE_BUFFER_ENTER,
+						handler = function()
+							vim.wo.number = true
+							vim.wo.relativenumber = true
+						end,
+					},
+					{
+						event = events.FILE_MOVED,
+						handler = on_file_remove,
+					},
+					{
+						event = events.FILE_RENAMED,
+						handler = on_file_remove,
+					},
 				},
 			})
 			vim.keymap.set("n", "<leader>b", ":Neotree toggle<CR>")
@@ -245,9 +286,9 @@ require("lazy").setup({
 		enabled = vim.fn.has("nvim-0.10.0") == 1,
 	},
 	{
-		"nobbmaestro/nvim-andromeda",
-		dependencies = { "tjdevries/colorbuddy.nvim" },
-		opts = {},
+		"scottmckendry/cyberdream.nvim",
+		lazy = false,
+		priority = 1000,
 	},
 	{
 		"Isrothy/neominimap.nvim",
@@ -298,3 +339,5 @@ require("lazy").setup({
 		end,
 	},
 })
+
+vim.cmd("colorscheme cyberdream")
