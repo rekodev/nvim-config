@@ -90,8 +90,8 @@ require("lazy").setup({
 					["<C-p>"] = cmp.mapping.select_prev_item({
 						behavior = cmp.SelectBehavior.Select,
 					}),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
-					["<C-A-Space>"] = cmp.mapping.complete(),
+					["<Tab>"] = cmp.mapping.confirm({ select = true }),
+					["<C-S-Space>"] = cmp.mapping.complete(),
 				},
 				sources = {
 					{ name = "nvim_lsp" },
@@ -160,7 +160,8 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>p", builtin.find_files)
 			vim.keymap.set("n", "<leader>ht", builtin.help_tags)
 			-- vim.keymap.set('n', '<a-p>', ":Telescope find_files" )
-			vim.keymap.set("n", "<leader><s-g>", builtin.git_status)
+			-- vim.keymap.set("n", "<leader><s-g>", builtin.git_status)
+			vim.keymap.set("n", "<leader>o", builtin.oldfiles)
 			vim.keymap.set("n", "<leader><s-f>", builtin.live_grep)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
@@ -214,6 +215,7 @@ require("lazy").setup({
 				filesystem = {
 					filtered_items = { hide_dotfiles = false, hide_gitignored = false, visible = true },
 					follow_current_file = { enabled = true, leave_dirs_open = false },
+					use_libuv_file_watcher = true,
 				},
 				event_handlers = {
 					{
@@ -233,7 +235,18 @@ require("lazy").setup({
 					},
 				},
 			})
+
 			vim.keymap.set("n", "<leader>b", ":Neotree toggle<CR>")
+
+			vim.api.nvim_create_autocmd({ "BufLeave" }, {
+				pattern = { "*lazygit*" },
+				group = vim.api.nvim_create_augroup("neovim_update_tree", { clear = true }),
+				callback = function()
+					require("neo-tree.sources.filesystem.commands").refresh(
+						require("neo-tree.sources.manager").get_state("filesystem")
+					)
+				end,
+			})
 		end,
 	},
 	{ "windwp/nvim-autopairs", opts = { disable_filetype = { "TelescopePrompt", "vim" }, check_ts = true } },
@@ -289,6 +302,25 @@ require("lazy").setup({
 		"scottmckendry/cyberdream.nvim",
 		lazy = false,
 		priority = 1000,
+	},
+	{
+		"kdheepak/lazygit.nvim",
+		cmd = {
+			"LazyGit",
+			"LazyGitConfig",
+			"LazyGitCurrentFile",
+			"LazyGitFilter",
+			"LazyGitFilterCurrentFile",
+		},
+		-- optional for floating window border decoration
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		-- setting the keybinding for LazyGit with 'keys' is recommended in
+		-- order to load the plugin when the command is run for the first time
+		keys = {
+			{ "<leader><S-g>", "<cmd>LazyGit<cr>", desc = "Open lazy git" },
+		},
 	},
 	{
 		"Isrothy/neominimap.nvim",
