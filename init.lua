@@ -91,7 +91,7 @@ require("lazy").setup({
 						behavior = cmp.SelectBehavior.Select,
 					}),
 					["<Tab>"] = cmp.mapping.confirm({ select = true }),
-					["<C-S-Space>"] = cmp.mapping.complete(),
+					["<C-space>"] = cmp.mapping.complete(),
 				},
 				sources = {
 					{ name = "nvim_lsp" },
@@ -156,13 +156,24 @@ require("lazy").setup({
 				},
 			})
 			require("telescope").load_extension("fzf")
+			require("telescope").load_extension("live_grep_args")
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>p", builtin.find_files)
 			vim.keymap.set("n", "<leader>ht", builtin.help_tags)
 			-- vim.keymap.set('n', '<a-p>', ":Telescope find_files" )
 			-- vim.keymap.set("n", "<leader><s-g>", builtin.git_status)
 			vim.keymap.set("n", "<leader>o", builtin.oldfiles)
-			vim.keymap.set("n", "<leader><s-f>", builtin.live_grep)
+			-- vim.keymap.set("n", "<leader><s-f>", builtin.live_grep)
+			vim.keymap.set(
+				"n",
+				"<leader><s-f>",
+				":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>"
+			)
+			vim.keymap.set("n", "<leader>sx", builtin.resume, {
+				noremap = true,
+				silent = true,
+				desc = "Resume",
+			})
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
 					local bufnr = args.buf
@@ -178,7 +189,16 @@ require("lazy").setup({
 				end,
 			})
 		end,
-		dependencies = { "nvim-lua/plenary.nvim", { "nvim-telescope/telescope-fzf-native.nvim", build = "make" } },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+			{
+				"nvim-telescope/telescope-live-grep-args.nvim",
+				-- This will not install any breaking changes.
+				-- For major updates, this must be adjusted manually.
+				version = "^1.0.0",
+			},
+		},
 	},
 	{
 		"nvim-neo-tree/neo-tree.nvim",
