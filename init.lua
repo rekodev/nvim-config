@@ -54,7 +54,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 -- tree sitter highlighting has priority over semantic tokens
 vim.highlight.priorities.semantic_tokens = 95
 vim.diagnostic.config({ update_in_insert = true })
-vim.keymap.set("n", "<leader>m", ":Neominimap toggle<CR>")
+vim.keymap.set("n", "<leader>m", ":Neominimap Toggle<CR>")
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -367,10 +367,8 @@ require("lazy").setup({
 
 			vim.g.neominimap = {
 				auto_enable = true,
+				layout = "split",
 				split = {
-					minimap_width = 16,
-				},
-				float = {
 					minimap_width = 16,
 				},
 				git = {
