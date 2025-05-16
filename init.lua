@@ -146,6 +146,9 @@ require("lazy").setup({
 					find_files = {
 						hidden = true,
 					},
+					oldfiles = {
+						cwd_only = true,
+					},
 				},
 				defaults = {
 					file_ignore_patterns = {
@@ -276,7 +279,7 @@ require("lazy").setup({
 	{
 		"stevearc/conform.nvim",
 		opts = {
-			format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
+			format_on_save = { timeout_ms = 2500, lsp_format = "fallback" },
 			formatters_by_ft = {
 				lua = { "stylua" },
 				javascript = { "prettier" },
@@ -347,49 +350,39 @@ require("lazy").setup({
 	},
 	{
 		"Isrothy/neominimap.nvim",
-		version = "v3.*.*",
-		enabled = true,
+		version = "v3.x.x",
 		lazy = false, -- NOTE: NO NEED to Lazy load
-		-- Optional
-		keys = {
-			-- Global Minimap Controls
-			{ "<leader>nm", "<cmd>Neominimap toggle<cr>", desc = "Toggle global minimap" },
-			{ "<leader>no", "<cmd>Neominimap on<cr>", desc = "Enable global minimap" },
-			{ "<leader>nc", "<cmd>Neominimap off<cr>", desc = "Disable global minimap" },
-			{ "<leader>nr", "<cmd>Neominimap refresh<cr>", desc = "Refresh global minimap" },
-
-			-- Window-Specific Minimap Controls
-			{ "<leader>nwt", "<cmd>Neominimap winToggle<cr>", desc = "Toggle minimap for current window" },
-			{ "<leader>nwr", "<cmd>Neominimap winRefresh<cr>", desc = "Refresh minimap for current window" },
-			{ "<leader>nwo", "<cmd>Neominimap winOn<cr>", desc = "Enable minimap for current window" },
-			{ "<leader>nwc", "<cmd>Neominimap winOff<cr>", desc = "Disable minimap for current window" },
-
-			-- Tab-Specific Minimap Controls
-			{ "<leader>ntt", "<cmd>Neominimap tabToggle<cr>", desc = "Toggle minimap for current tab" },
-			{ "<leader>ntr", "<cmd>Neominimap tabRefresh<cr>", desc = "Refresh minimap for current tab" },
-			{ "<leader>nto", "<cmd>Neominimap tabOn<cr>", desc = "Enable minimap for current tab" },
-			{ "<leader>ntc", "<cmd>Neominimap tabOff<cr>", desc = "Disable minimap for current tab" },
-
-			-- Buffer-Specific Minimap Controls
-			{ "<leader>nbt", "<cmd>Neominimap bufToggle<cr>", desc = "Toggle minimap for current buffer" },
-			{ "<leader>nbr", "<cmd>Neominimap bufRefresh<cr>", desc = "Refresh minimap for current buffer" },
-			{ "<leader>nbo", "<cmd>Neominimap bufOn<cr>", desc = "Enable minimap for current buffer" },
-			{ "<leader>nbc", "<cmd>Neominimap bufOff<cr>", desc = "Disable minimap for current buffer" },
-
-			---Focus Controls
-			{ "<leader>nf", "<cmd>Neominimap focus<cr>", desc = "Focus on minimap" },
-			{ "<leader>nu", "<cmd>Neominimap unfocus<cr>", desc = "Unfocus minimap" },
-			{ "<leader>ns", "<cmd>Neominimap toggleFocus<cr>", desc = "Switch focus on minimap" },
-		},
 		init = function()
-			-- The following options are recommended when layout == "float"
 			vim.opt.wrap = false
-			vim.opt.sidescrolloff = 36 -- Set a large value
+			vim.opt.sidescrolloff = 36
+			vim.cmd([[
+				highlight NeominimapGitAddLine guifg=#00ff00 guibg=#004d00  " Bright green on dark green
+				highlight NeominimapGitChangeLine guifg=#ffff00 guibg=#4d4d00 " Bright yellow on dark yellow
+				highlight NeominimapGitDeleteLine guifg=#ff3333 guibg=#4d0000 " Bright red on dark red
 
-			--- Put your configuration here
-			---@type Neominimap.UserConfig
+				highlight NeominimapGitAddIcon guifg=#00ff00 guibg=NONE      " Bright green
+				highlight NeominimapGitChangeIcon guifg=#ffff00 guibg=NONE   " Bright yellow
+				highlight NeominimapGitDeleteIcon guifg=#ff3333 guibg=NONE   " Bright red
+			]])
+
 			vim.g.neominimap = {
 				auto_enable = true,
+				split = {
+					minimap_width = 16,
+				},
+				float = {
+					minimap_width = 16,
+				},
+				git = {
+					enabled = true,
+					mode = "line",
+					priority = 6,
+					icon = {
+						add = "+ ",
+						change = "~ ",
+						delete = "- ",
+					},
+				},
 			}
 		end,
 	},
