@@ -55,6 +55,11 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.highlight.priorities.semantic_tokens = 95
 vim.diagnostic.config({ update_in_insert = true })
 vim.keymap.set("n", "<leader>m", ":Neominimap Toggle<CR>")
+vim.filetype.add({
+	extension = {
+		avdl = "avdl",
+	},
+})
 
 -- Setup lazy.nvim
 require("lazy").setup({
