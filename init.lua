@@ -350,6 +350,15 @@ require("lazy").setup({
 	},
 	{
 		"github/copilot.vim",
+		init = function()
+			vim.keymap.set("i", "<leader><Tab>", 'copilot#Accept("")', {
+				expr = true,
+				silent = true,
+				replace_keycodes = false,
+				desc = "Accept Copilot suggestion",
+			})
+			vim.g.copilot_no_tab_map = true
+		end,
 	},
 	{
 		"Isrothy/neominimap.nvim",
