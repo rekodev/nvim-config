@@ -309,7 +309,11 @@ require("lazy").setup({
 	},
 	{
 		"tronikelis/ts-autotag.nvim",
-		opts = {},
+		opts = {
+			auto_rename = {
+				enabled = true,
+			},
+		},
 		-- ft = {}, optionally you can load it only in jsx/html
 		event = "VeryLazy",
 	},
